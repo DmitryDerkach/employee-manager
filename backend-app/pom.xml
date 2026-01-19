@@ -10,6 +10,7 @@
     </parent>
 
     <artifactId>backend-app</artifactId>
+    <packaging>war</packaging>
 
     <properties>
         <maven.compiler.source>8</maven.compiler.source>
