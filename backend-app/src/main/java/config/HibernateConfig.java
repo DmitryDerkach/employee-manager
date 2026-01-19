@@ -15,7 +15,7 @@ import java.util.Properties;
 @Configuration
 // @EnableTransactionManagement — разрешает Спрингу управлять транзакциями (откатывать изменения при ошибках)
 @EnableTransactionManagement
-@ComponentScan({"dao"})
+@ComponentScan({"dao", "service"})
 // Если потом добавишь сервисы, напишешь: {"dao", "service"}
 public class HibernateConfig {
 
