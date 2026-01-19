@@ -1,9 +1,8 @@
 import config.HibernateConfig;
-import dao.EmployeeDao;
 import model.Employee;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
-
+import service.EmployeeService;
 import java.util.List;
 
 public class App {
@@ -12,26 +11,24 @@ public class App {
 
         ApplicationContext context = new AnnotationConfigApplicationContext(HibernateConfig.class);
 
-        // 1. Получаем наш новый DAO из контекста
-        // Обрати внимание: мы просим Интерфейс (EmployeeDao), а Спринг дает Реализацию (EmployeeDaoImpl)
-        EmployeeDao employeeDao = context.getBean(EmployeeDao.class);
+        // ВАЖНО: Теперь мы просим у Спринга не DAO, а СЕРВИС!
+        // Мы говорим: "Дай нам менеджера, а не рабочего"
+        EmployeeService employeeService = context.getBean(EmployeeService.class);
 
-        // 2. Создаем сотрудника (пока он только в памяти Java)
-        Employee newEmployee = new Employee("Ivan", "Ivanov", "ivan@example.com", "IT", 50000.0);
+        // Создаем сотрудника (меняем email, чтобы не было ошибки уникальности!)
+        Employee newEmployee = new Employee("Petr", "Petrov", "petr@example.com", "Sales", 40000.0);
 
-        // 3. Сохраняем в базу!
-        System.out.println("Saving employee...");
-        employeeDao.save(newEmployee);
-        System.out.println("Employee saved! ID: " + newEmployee.getId());
+        System.out.println("Registering employee via Service...");
 
-        // 4. Проверяем, что он там есть — читаем из базы
-        List<Employee> allEmployees = employeeDao.findAll();
-        System.out.println("Total employees in DB: " + allEmployees.size());
+        // Вызываем метод бизнес-логики
+        employeeService.registerEmployee(newEmployee);
 
+        System.out.println("Employee registered!");
+
+        // Проверяем через сервис
+        List<Employee> allEmployees = employeeService.getAllEmployees();
         for (Employee emp : allEmployees) {
-            System.out.println("Found: " + emp.getFirstName() + " " + emp.getLastName());
+            System.out.println("Found: " + emp.getFirstName() + " (" + emp.getEmail() + ")");
         }
-
-        System.out.println("----- FINISHED -----");
     }
 }
