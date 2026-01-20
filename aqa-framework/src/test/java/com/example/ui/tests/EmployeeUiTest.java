@@ -1,16 +1,16 @@
 package com.example.ui.tests;
 
 import com.codeborne.selenide.Configuration;
+import com.example.ui.pages.EmployeeModal;
+import com.example.ui.pages.MainPage;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
-import static com.codeborne.selenide.Condition.text;
-import static com.codeborne.selenide.Condition.visible;
-import static com.codeborne.selenide.Selenide.$;
-import static com.codeborne.selenide.Selenide.$$;
-import static com.codeborne.selenide.Selenide.open;
-
 public class EmployeeUiTest {
+
+    // Объявляем наши страницы
+    private MainPage mainPage = new MainPage();
+    private EmployeeModal modal = new EmployeeModal();
 
     @BeforeClass
     public void setUp() {
@@ -21,42 +21,29 @@ public class EmployeeUiTest {
 
     @Test
     public void testApplicationOpens() {
-        open("/");
-        $("h2").shouldBe(visible).shouldHave(text("Employee Manager"));
-        $("button.btn-primary").shouldBe(visible).shouldHave(text("Добавить"));
+        mainPage.openPage();
+        mainPage.checkHeaderVisible();
     }
 
     @Test
     public void testCanCreateEmployeeViaUi() {
-        // 1. Открываем сайт
-        open("/");
-
-        // 2. Генерируем уникальные данные
+        // Подготовка данных
         long timestamp = System.currentTimeMillis();
-        String name = "SelenideUser";
-        String email = "auto_" + timestamp + "@test.com";
+        String name = "PageObjectUser";
+        String email = "po_" + timestamp + "@test.com";
 
-        // 3. Нажимаем кнопку "+ Добавить"
-        $("button.btn-primary").click();
+        // 1. Открываем страницу
+        mainPage.openPage();
 
-        // 4. Ждем появления модального окна и заполняем поля
-        // Selenide сам подождет, пока окно станет visible
-        $("#firstName").setValue(name);
-        $("#lastName").setValue("Robot");
-        $("#email").setValue(email);
-        $("#department").setValue("AQA");
-        $("#salary").setValue("9999");
+        // 2. Жмем кнопку
+        mainPage.clickAddButton();
 
-        // 5. Жмем "Сохранить" внутри модалки
-        // Ищем кнопку по тексту, так надежнее
-        $$("button").findBy(text("Сохранить")).click();
+        // 3. Заполняем форму (Смотри, как чисто стало!)
+        modal.fillForm(name, "Bot", email, "DevOps", "5000");
+        modal.clickSave();
 
-        // 6. ПРОВЕРКА:
-        // Модальное окно должно исчезнуть
-        $("#addEmployeeModal").shouldNotBe(visible);
-
-        // В таблице должна появиться новая строка с нашим email
-        // $$("tr") - это все строки. Берем последнюю и проверяем текст
-        $$("tr").last().shouldHave(text(name), text(email));
+        // 4. Проверяем результат
+        modal.checkIsClosed();
+        mainPage.checkLastEmployee(name, email);
     }
 }
