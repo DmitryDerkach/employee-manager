@@ -60,4 +60,26 @@ public class EmployeeApiTest {
 
         Assert.assertTrue(isFound, "Сотрудник с email " + uniqueEmail + " не был найден в списке!");
     }
+    
+    @Test
+    public void testCannotCreateEmployeeWithoutEmail() {
+        // --- 1. Prepare (Генерируем сотрудника БЕЗ почты) ---
+        EmployeeDto invalidEmployee = EmployeeDto.builder()
+                .firstName("Buggy")
+                .lastName("Bugov")
+                .salary(1000.0)
+                .department("QA")
+                // .email(...) // СПЕЦИАЛЬНО НЕ ЗАПОЛНЯЕМ EMAIL
+                .build();
+
+        // --- 2. Act & Assert (Отправляем и ждем ошибку) ---
+        given()
+            .contentType(ContentType.JSON)
+            .body(invalidEmployee)
+        .when()
+            .post("/employees")
+        .then()
+            .log().all() // Эта команда выведет ответ сервера в консоль (чтобы мы увидели ошибку)
+            .statusCode(500); // Ожидаем ошибку сервера (Internal Server Error)
+    }
 }
