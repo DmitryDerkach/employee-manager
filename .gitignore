@@ -37,3 +37,9 @@ build/
 
 ### Mac OS ###
 .DS_Store
+
+# Игнорировать папку test-output везде
+test-output/
+
+# Игнорировать конкретно в подпапке (на всякий случай)
+aqa-framework/test-output/
