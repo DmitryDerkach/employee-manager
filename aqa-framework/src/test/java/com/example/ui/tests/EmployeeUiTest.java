@@ -1,6 +1,7 @@
 package com.example.ui.tests;
 
 import com.codeborne.selenide.Configuration;
+import com.example.ui.pages.AboutPage;
 import com.example.ui.pages.EmployeeModal;
 import com.example.ui.pages.MainPage;
 import org.testng.annotations.BeforeClass;
@@ -11,6 +12,7 @@ public class EmployeeUiTest {
     // Объявляем наши страницы
     private MainPage mainPage = new MainPage();
     private EmployeeModal modal = new EmployeeModal();
+    private AboutPage aboutPage = new AboutPage();
 
     @BeforeClass
     public void setUp() {
@@ -45,5 +47,24 @@ public class EmployeeUiTest {
         // 4. Проверяем результат
         modal.checkIsClosed();
         mainPage.checkLastEmployee(name, email);
+    }
+    
+    @Test
+    public void testNavigationMenu() {
+        // 1. Открываем главную
+        mainPage.openPage();
+        mainPage.checkHeaderVisible();
+
+        // 2. Используем ВИДЖЕТ для перехода на "О проекте"
+        mainPage.menu.clickAbout();
+
+        // 3. Проверяем, что мы на странице "О проекте"
+        aboutPage.checkHeader();
+
+        // 4. Используем ВИДЖЕТ (уже со страницы About), чтобы вернуться
+        aboutPage.menu.clickHome();
+
+        // 5. Проверяем, что вернулись
+        mainPage.checkHeaderVisible();
     }
 }

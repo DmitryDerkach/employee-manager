@@ -11,29 +11,28 @@ import static com.codeborne.selenide.Selenide.open;
 
 public class MainPage {
 
-    // === ЛОКАТОРЫ (То, что видит пользователь) ===
-    // Мы прячем их здесь, чтобы тест не знал про css селекторы
+    // Внедряем (композиция) наше меню
+    // Теперь через mainPage.menu().clickAbout() мы можем кликать
+    public final MenuWidget menu = new MenuWidget();
+
     private final SelenideElement header = $("h2");
     private final SelenideElement addButton = $("button.btn-primary");
     private final ElementsCollection employeeRows = $$("tr");
 
-    // === ДЕЙСТВИЯ (Что можно сделать на странице) ===
-
     public void openPage() {
-        open("/");
+        open("/index.html"); // Явно указываем index.html
     }
 
-    public void clickAddButton() {
-        addButton.shouldBe(visible).click();
-    }
-
-    // Проверки (Assertions) тоже часто выносят в Page Object
     public void checkHeaderVisible() {
         header.shouldHave(text("Employee Manager"));
     }
-
+    
+    // ... остальные методы (clickAddButton и т.д.) оставь как были
+    public void clickAddButton() {
+        addButton.shouldBe(visible).click();
+    }
+    
     public void checkLastEmployee(String expectedName, String expectedEmail) {
-        // Берем последнюю строку и проверяем, что в ней есть имя и почта
         employeeRows.last().shouldHave(text(expectedName), text(expectedEmail));
     }
 }
