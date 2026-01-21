@@ -69,4 +69,8 @@
         </dependency>
     </dependencies>
 
+    <build>
+        <finalName>employee-app</finalName>
+    </build>
+
 </project>
