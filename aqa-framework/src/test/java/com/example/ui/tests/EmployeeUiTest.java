@@ -4,6 +4,7 @@ import com.codeborne.selenide.Configuration;
 import com.example.ui.pages.AboutPage;
 import com.example.ui.pages.EmployeeModal;
 import com.example.ui.pages.MainPage;
+import config.TestConfig;
 import org.testng.annotations.BeforeClass;
 import org.testng.annotations.Test;
 
@@ -16,7 +17,7 @@ public class EmployeeUiTest {
 
     @BeforeClass
     public void setUp() {
-        Configuration.baseUrl = "http://localhost:8080";
+        Configuration.baseUrl = TestConfig.BASE_URL;
         Configuration.browser = "chrome";
         Configuration.timeout = 5000;
     }

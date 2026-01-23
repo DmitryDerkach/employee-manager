@@ -1,6 +1,7 @@
 package com.example.api.tests;
 
 import com.example.api.model.EmployeeDto;
+import config.TestConfig;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.testng.Assert;
@@ -9,7 +10,6 @@ import org.testng.annotations.Test;
 
 import java.util.List;
 
-// Статический импорт нужен, чтобы писать просто given(), а не RestAssured.given()
 import static io.restassured.RestAssured.given;
 
 public class EmployeeApiTest {
@@ -17,7 +17,8 @@ public class EmployeeApiTest {
     @BeforeClass
     public void setUp() {
         // Настраиваем RestAssured: говорим ему, где живет наш сервер
-        RestAssured.baseURI = "http://localhost:8080";
+        //RestAssured.baseURI = "http://localhost:8080";
+        RestAssured.baseURI = TestConfig.BASE_URL;
     }
 
     @Test
