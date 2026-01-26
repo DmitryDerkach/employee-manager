@@ -43,3 +43,12 @@ test-output/
 
 # Игнорировать конкретно в подпапке (на всякий случай)
 aqa-framework/test-output/
+
+### Allure & Testing artifacts ###
+.allure/
+allure-results/
+allure-report/
+target/
+
+### AspectJ Crash Dumps (Мусор от ошибок) ###
+ajcore*.txt
