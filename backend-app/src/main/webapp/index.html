@@ -6,35 +6,42 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
     <style>
-        body { background-color: #f8f9fa; }
-        .card { border-radius: 15px; border: none; }
+        body {
+            background-color: #f8f9fa;
+        }
+
+        .card {
+            border-radius: 15px;
+            border: none;
+        }
     </style>
 </head>
 <body>
 
 <nav class="navbar navbar-expand-lg navbar-dark bg-dark">
-        <div class="container-fluid">
-            <a class="navbar-brand" href="#">MyApp</a>
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <ul class="navbar-nav">
-                    <li class="nav-item">
-                        <a class="nav-link" href="index.html" id="nav-home">Главная</a>
-                    </li>
-                    <li class="nav-item">
-                        <a class="nav-link" href="about.html" id="nav-about">О проекте</a>
-                    </li>
-                </ul>
-            </div>
+    <div class="container-fluid">
+        <a class="navbar-brand" href="#">MyApp</a>
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav">
+                <li class="nav-item">
+                    <a class="nav-link" href="index.html" id="nav-home">Главная</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="about.html" id="nav-about">О проекте</a>
+                </li>
+            </ul>
         </div>
-    </nav>
+    </div>
+</nav>
 
 <div class="container mt-5">
     <div class="row justify-content-center">
         <div class="col-md-10">
-            
+
             <div class="d-flex justify-content-between align-items-center mb-4">
                 <h2 class="text-secondary">👨‍💼 Employee Manager</h2>
-                <button class="btn btn-primary btn-lg shadow-sm" data-bs-toggle="modal" data-bs-target="#addEmployeeModal">
+                <button class="btn btn-primary btn-lg shadow-sm" data-bs-target="#addEmployeeModal"
+                        data-bs-toggle="modal">
                     + Добавить
                 </button>
             </div>
@@ -43,16 +50,16 @@
                 <div class="card-body p-0">
                     <table class="table table-hover mb-0">
                         <thead class="table-light">
-                            <tr>
-                                <th scope="col" class="ps-4">ID</th>
-                                <th scope="col">Имя Фамилия</th>
-                                <th scope="col">Email</th>
-                                <th scope="col">Отдел</th>
-                                <th scope="col" class="text-end pe-4">Зарплата ($)</th>
-                            </tr>
+                        <tr>
+                            <th class="ps-4" scope="col">ID</th>
+                            <th scope="col">Имя Фамилия</th>
+                            <th scope="col">Email</th>
+                            <th scope="col">Отдел</th>
+                            <th class="text-end pe-4" scope="col">Зарплата ($)</th>
+                        </tr>
                         </thead>
                         <tbody id="employee-table-body">
-                            </tbody>
+                        </tbody>
                     </table>
                 </div>
             </div>
@@ -62,42 +69,42 @@
 </div>
 
 <div class="modal fade" id="addEmployeeModal" tabindex="-1">
-  <div class="modal-dialog">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title">Новый сотрудник</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
-      </div>
-      <div class="modal-body">
-        <form id="addEmployeeForm">
-            <div class="mb-3">
-                <label class="form-label">Имя</label>
-                <input type="text" class="form-control" id="firstName" required>
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Новый сотрудник</h5>
+                <button class="btn-close" data-bs-dismiss="modal" type="button"></button>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Фамилия</label>
-                <input type="text" class="form-control" id="lastName" required>
+            <div class="modal-body">
+                <form id="addEmployeeForm">
+                    <div class="mb-3">
+                        <label class="form-label">Имя</label>
+                        <input class="form-control" id="firstName" required type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Фамилия</label>
+                        <input class="form-control" id="lastName" required type="text">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Email</label>
+                        <input class="form-control" id="email" placeholder="name@example.com" required type="email">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Отдел</label>
+                        <input class="form-control" id="department" type="text" value="IT">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Зарплата</label>
+                        <input class="form-control" id="salary" type="number" value="1000">
+                    </div>
+                </form>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Email</label>
-                <input type="email" class="form-control" id="email" placeholder="name@example.com" required>
+            <div class="modal-footer">
+                <button class="btn btn-secondary" data-bs-dismiss="modal" type="button">Отмена</button>
+                <button class="btn btn-primary" onclick="createEmployee()" type="button">Сохранить</button>
             </div>
-            <div class="mb-3">
-                <label class="form-label">Отдел</label>
-                <input type="text" class="form-control" id="department" value="IT">
-            </div>
-            <div class="mb-3">
-                <label class="form-label">Зарплата</label>
-                <input type="number" class="form-control" id="salary" value="1000">
-            </div>
-        </form>
-      </div>
-      <div class="modal-footer">
-        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Отмена</button>
-        <button type="button" class="btn btn-primary" onclick="createEmployee()">Сохранить</button>
-      </div>
+        </div>
     </div>
-  </div>
 </div>
 
 <script>
@@ -119,7 +126,7 @@
     function renderTable(data) {
         let tableBody = document.getElementById('employee-table-body');
         tableBody.innerHTML = ''; // Чистим таблицу
-        
+
         data.forEach(e => {
             let row = `
                 <tr>
@@ -146,7 +153,7 @@
         };
 
         // Простая проверка (чтобы не отправлять пустоту)
-        if(!employeeData.email || !employeeData.firstName) {
+        if (!employeeData.email || !employeeData.firstName) {
             alert("Пожалуйста, заполните Имя и Email!");
             return;
         }
@@ -155,7 +162,7 @@
             // Отправляем запрос
             let response = await fetch(API_URL, {
                 method: 'POST',
-                headers: { 'Content-Type': 'application/json' },
+                headers: {'Content-Type': 'application/json'},
                 body: JSON.stringify(employeeData)
             });
 
@@ -165,12 +172,12 @@
                 const modalElement = document.getElementById('addEmployeeModal');
                 const modalInstance = bootstrap.Modal.getInstance(modalElement);
                 modalInstance.hide();
-                
+
                 // 2. Очищаем форму
                 document.getElementById('addEmployeeForm').reset();
-                
+
                 // 3. Обновляем таблицу (чтобы увидеть нового сотрудника)
-                loadEmployees(); 
+                loadEmployees();
             } else {
                 alert('Ошибка сервера! Статус: ' + response.status);
             }

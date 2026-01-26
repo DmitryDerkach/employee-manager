@@ -49,7 +49,7 @@ public class EmployeeUiTest {
         modal.checkIsClosed();
         mainPage.checkLastEmployee(name, email);
     }
-    
+
     @Test
     public void testNavigationMenu() {
         // 1. Открываем главную

@@ -21,7 +21,7 @@ import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 @Import({SpringDocConfiguration.class, SpringDocWebMvcConfiguration.class, SwaggerConfig.class})
 public class WebConfig implements WebMvcConfigurer {
     // Здесь можно настраивать всякие штуки типа CORS, но пока оставим пустым
-    
+
     // 1. Создаем объект базовых настроек
     @Bean
     public SpringDocConfigProperties springDocConfigProperties() {
@@ -33,19 +33,19 @@ public class WebConfig implements WebMvcConfigurer {
     public SwaggerUiConfigProperties swaggerUiConfigProperties() {
         return new SwaggerUiConfigProperties(); // <-- Пустые скобки!
     }
-	
- // 3. Настройки OAuth (ЭТОГО НЕ ХВАТАЛО) 👇
+
+    // 3. Настройки OAuth (ЭТОГО НЕ ХВАТАЛО) 👇
     @Bean
     public SwaggerUiOAuthProperties swaggerUiOAuthProperties() {
         return new SwaggerUiOAuthProperties();
     }
-	
-	@Override
+
+    @Override
     public void configureDefaultServletHandling(DefaultServletHandlerConfigurer configurer) {
         configurer.enable();
     }
-	
-	// 2. А ВОТ ЭТО НУЖНО ДОБАВИТЬ ДЛЯ SWAGGER 👇
+
+    // 2. А ВОТ ЭТО НУЖНО ДОБАВИТЬ ДЛЯ SWAGGER 👇
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         // Разрешаем доступ к главной странице Swagger

@@ -1,6 +1,7 @@
 package com.example.ui.pages;
 
 import com.codeborne.selenide.SelenideElement;
+
 import static com.codeborne.selenide.Condition.text;
 import static com.codeborne.selenide.Condition.visible;
 import static com.codeborne.selenide.Selenide.$;
@@ -15,7 +16,7 @@ public class EmployeeModal {
     private final SelenideElement emailInput = $("#email");
     private final SelenideElement departmentInput = $("#department");
     private final SelenideElement salaryInput = $("#salary");
-    
+
     // Кнопку ищем по тексту, так надежнее
     private final SelenideElement saveButton = $$("button").findBy(text("Сохранить"));
 
