@@ -7,6 +7,14 @@ on:
   pull_request:
     branches: [ "master", "master", "pipe-check"]
 
+# --- ВСТАВКА НАЧАЛО ---
+# Разрешаем пайплайну писать в репозиторий (нужно для публикации отчета)
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+# --- ВСТАВКА КОНЕЦ ---
+
 jobs:
   build-and-test:
     # ГДЕ запускать? (На чистом виртуальном компьютере Ubuntu)
@@ -55,3 +63,33 @@ jobs:
       - name: Dump Docker Logs
         if: failure()
         run: docker compose logs
+      # ... тут были тесты и docker logs ...
+
+      # 9. Генерируем отчет и загружаем его в "историю" пайплайна
+      - name: Load test report history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          # Где искать результаты тестов (JSON)
+          allure_results: aqa-framework/target/allure-results
+          # Сохранять историю предыдущих прогонов? Да!
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+
+      # 10. Публикуем отчет на GitHub Pages
+      - name: Publish Allure Report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
