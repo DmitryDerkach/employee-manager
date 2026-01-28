@@ -42,11 +42,8 @@ jobs:
       - name: Start Docker Environment
         run: docker compose up -d --build
 
-      # 6. Пауза на кофе ☕
-      # Tomcat грузится не мгновенно. Дадим ему 30 секунд проснуться.
-      # (Позже мы заменим это на умную проверку healthcheck)
-      - name: Wait for Tomcat to start
-        run: sleep 30
+      - name: Start Docker Environment
+        run: docker compose up -d --build --wait
 
       # 7. Тестирование - ЭТАП "ОБСТРЕЛ"
       - name: Run Tests (E2E & Integration)

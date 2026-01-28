@@ -1,6 +1,11 @@
 # 1. Берем за основу готовый образ Linux с Java 8 и Tomcat 9
 FROM tomcat:9.0-jdk8-openjdk
 
+# --- ВСТАВКА НАЧАЛО ---
+# Обновляем списки пакетов и устанавливаем curl для healthcheck'а
+RUN apt-get update && apt-get install -y curl
+# --- ВСТАВКА КОНЕЦ ---
+
 # 2. (Опционально) Удаляем стандартное приложение Tomcat "ROOT", чтобы наше стало главным
 RUN rm -rf /usr/local/tomcat/webapps/ROOT
 
