@@ -49,7 +49,12 @@ jobs:
         run: sleep 30
 
       # 7. Тестирование - ЭТАП "ОБСТРЕЛ"
-      # Мы запускаем только модуль тестов.
-      # Тесты стучатся на localhost:8080, где уже работает контейнер.
       - name: Run Tests (E2E & Integration)
-        run: mvn test -pl aqa-framework
+        # Добавляем флаг headless для UI тестов
+        run: mvn test -pl aqa-framework -Dselenide.headless=true
+
+      # 8. (DEBUG) Если что-то упало — покажи логи контейнеров!
+      # Этот шаг выполнится, только если предыдущие шаги упали (if: failure())
+      - name: Dump Docker Logs
+        if: failure()
+        run: docker compose logs
