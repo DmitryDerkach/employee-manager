@@ -48,9 +48,6 @@ jobs:
       # 5. Запуск окружения (Run) - ЭТАП "СЕЙФ"
       # Docker берет WAR файл, копирует его в контейнер и запускает Tomcat.
       - name: Start Docker Environment
-        run: docker compose up -d --build
-
-      - name: Start Docker Environment
         run: docker compose up -d --build --wait
 
       # 7. Тестирование - ЭТАП "ОБСТРЕЛ"
