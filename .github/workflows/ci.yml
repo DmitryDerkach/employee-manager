@@ -56,6 +56,14 @@ jobs:
         # Добавляем флаг headless для UI тестов
         run: mvn test -pl aqa-framework -Dselenide.headless=true
 
+      # --- ВСТАВКА НАЧАЛО: Переключаем Java для Сонара ---
+      - name: Set up JDK 17 for Sonar
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17'
+          distribution: 'temurin'
+      # --- ВСТАВКА КОНЕЦ ---
+
       # ВМЕСТО step "SonarCloud Scan" вставь это:
       - name: SonarCloud Scan (via Maven)
         env:
