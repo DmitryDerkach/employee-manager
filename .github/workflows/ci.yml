@@ -58,7 +58,7 @@ jobs:
 
       # --- ВСТАВИТЬ ПОСЛЕ TЕСТОВ ---
       - name: SonarCloud Scan
-        uses: SonarSource/sonarcloud-github-action@master
+        uses: SonarSource/sonarqube-scan-action@v4
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}  # Этот токен Гитхаб дает сам
           SONAR_TOKEN: ${{ secrets.SONAR_TOKEN }}    # А этот мы только что добавили
