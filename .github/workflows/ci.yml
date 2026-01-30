@@ -1,0 +1,93 @@
+name: Java CI with Maven & Docker
+
+# КОГДА запускать этот "Листочек с заданиями"?
+on:
+  push:
+    branches: [ "master", "master", "pipe-check"]
+  pull_request:
+    branches: [ "master", "master", "pipe-check"]
+  workflow_dispatch:
+
+# --- ВСТАВКА НАЧАЛО ---
+# Разрешаем пайплайну писать в репозиторий (нужно для публикации отчета)
+permissions:
+  contents: write
+  pages: write
+  id-token: write
+# --- ВСТАВКА КОНЕЦ ---
+
+jobs:
+  build-and-test:
+    # ГДЕ запускать? (На чистом виртуальном компьютере Ubuntu)
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. Скачиваем твой код на машину Runner'а
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # 2. Устанавливаем Java 8 (как у тебя локально)
+      - name: Set up JDK 8
+        uses: actions/setup-java@v3
+        with:
+          java-version: '8'
+          distribution: 'temurin'
+          cache: 'maven' # Кэшируем библиотеки, чтобы не качать интернет каждый раз
+
+      # 3. Проверка стиля (Checkstyle)
+      # Если тут будет ошибка, пайплайн упадет СРАЗУ (Fail Fast).
+      # Мы не тратим время на сборку и Docker, если код кривой.
+      - name: Run Checkstyle
+        run: mvn checkstyle:check
+
+      # 4. Сборка приложения (Build) - ЭТАП "ВЕРСТАК"
+      # Мы создаем backend-app.war в папке target.
+      # Важно: -DskipTests, потому что Docker еще не запущен!
+      - name: Build Backend WAR
+        run: mvn clean package -pl backend-app -am -DskipTests
+
+      # 5. Запуск окружения (Run) - ЭТАП "СЕЙФ"
+      # Docker берет WAR файл, копирует его в контейнер и запускает Tomcat.
+      - name: Start Docker Environment
+        run: docker compose up -d --build --wait
+
+      # 7. Тестирование - ЭТАП "ОБСТРЕЛ"
+      - name: Run Tests (E2E & Integration)
+        # Добавляем флаг headless для UI тестов
+        run: mvn test -pl aqa-framework -Dselenide.headless=true
+
+      # 8. (DEBUG) Если что-то упало — покажи логи контейнеров!
+      # Этот шаг выполнится, только если предыдущие шаги упали (if: failure())
+      - name: Dump Docker Logs
+        if: failure()
+        run: docker compose logs
+      # ... тут были тесты и docker logs ...
+
+      # 9. Генерируем отчет и загружаем его в "историю" пайплайна
+      - name: Load test report history
+        uses: actions/checkout@v3
+        if: always()
+        continue-on-error: true
+        with:
+          ref: gh-pages
+          path: gh-pages
+
+      - name: Build Allure Report
+        uses: simple-elf/allure-report-action@master
+        if: always()
+        with:
+          # Где искать результаты тестов (JSON)
+          allure_results: aqa-framework/target/allure-results
+          # Сохранять историю предыдущих прогонов? Да!
+          gh_pages: gh-pages
+          allure_report: allure-report
+          allure_history: allure-history
+
+      # 10. Публикуем отчет на GitHub Pages
+      - name: Publish Allure Report
+        uses: peaceiris/actions-gh-pages@v3
+        if: always()
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_branch: gh-pages
+          publish_dir: allure-history
