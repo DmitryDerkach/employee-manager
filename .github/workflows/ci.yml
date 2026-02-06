@@ -25,6 +25,8 @@ jobs:
       # 1. Скачиваем твой код на машину Runner'а
       - name: Checkout code
         uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
 
       # 2. Устанавливаем Java 8 (как у тебя локально)
       - name: Set up JDK 8
