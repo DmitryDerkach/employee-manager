@@ -41,12 +41,20 @@ jobs:
       # Мы не тратим время на сборку и Docker, если код кривой.
       - name: Run Checkstyle
         run: mvn checkstyle:check
+      # --- ИЗМЕНЕНИЯ НАЧИНАЮТСЯ ЗДЕСЬ ---
 
-      # 4. Сборка приложения (Build) - ЭТАП "ВЕРСТАК"
-      # Мы создаем backend-app.war в папке target.
-      # Важно: -DskipTests, потому что Docker еще не запущен!
+      # 4.1. Сначала запускаем тесты (и делаем clean здесь)
+      # Это создаст отчет Coverage в папке target
+      - name: Run Unit Tests (for Coverage)
+        run: mvn clean test -pl backend-app
+
+      # 4.2. Сборка приложения (Build) - ЭТАП "ВЕРСТАК"
+      # УБИРАЕМ слово 'clean', чтобы не удалить отчет от предыдущего шага!
+      # Оставляем -DskipTests, так как тесты мы уже прогнали выше.
       - name: Build Backend WAR
-        run: mvn clean package -pl backend-app -am -DskipTests
+        run: mvn package -pl backend-app -am -DskipTests
+
+      # --- ИЗМЕНЕНИЯ ЗАКОНЧИЛИСЬ ---
 
       # 5. Запуск окружения (Run) - ЭТАП "СЕЙФ"
       # Docker берет WAR файл, копирует его в контейнер и запускает Tomcat.
