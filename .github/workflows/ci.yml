@@ -77,15 +77,6 @@ jobs:
           # Пока мы просто хотим получить красивый отчет, а не блокировать релиз.
           fail_action: false
 
-      # ZAP автоматически генерирует HTML-отчет о взломе.
-      # Давай сохраним его как Артефакт, чтобы ты мог его скачать и посмотреть!
-      - name: Upload ZAP Security Report
-        uses: actions/upload-artifact@v4
-        with:
-          name: ZAP-Security-Report
-          path: zap_report.html
-      # --- КОНЕЦ БЛОКА БЕЗОПАСНОСТИ ---
-
       # --- ВСТАВКА НАЧАЛО: Переключаем Java для Сонара ---
       - name: Set up JDK 17 for Sonar
         uses: actions/setup-java@v4
