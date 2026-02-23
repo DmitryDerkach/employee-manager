@@ -3,7 +3,8 @@ version: '3.8'
 services:
   # 1. Наше приложение
   app:
-    build: .                 # Собираем из текущей папки (Dockerfile)
+    #build: .                # <-- БОЛЬШЕ НЕ СОБИРАЕМ ЛОКАЛЬНО
+    image: dmitryderkach/employee-manager-app:latest
     ports:
       - "8080:8080"          # Пробрасываем порт наружу
     depends_on:
