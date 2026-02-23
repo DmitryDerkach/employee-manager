@@ -133,35 +133,35 @@ jobs:
 
     # ... тут заканчивается твоя джоба build-and-test ...
 
-    # НАША НОВАЯ ДЖОБА ДЛЯ ДОКЕРА
-    build-and-push-docker:
-      needs: build-and-test # ⚠️ МАГИЯ ЗДЕСЬ! Ждем, пока первая джоба успешно завершится. Если тесты упадут - эта джоба отменится!
-      runs-on: ubuntu-latest
+  # НАША НОВАЯ ДЖОБА ДЛЯ ДОКЕРА
+  build-and-push-docker:
+    needs: build-and-test # ⚠️ МАГИЯ ЗДЕСЬ! Ждем, пока первая джоба успешно завершится. Если тесты упадут - эта джоба отменится!
+    runs-on: ubuntu-latest
 
-      steps:
-        # 1. Скачиваем Dockerfile из репозитория
-        - name: Checkout Repository
-          uses: actions/checkout@v4
+    steps:
+      # 1. Скачиваем Dockerfile из репозитория
+      - name: Checkout Repository
+        uses: actions/checkout@v4
 
-        # 2. Скачиваем "посылку" с WAR-файлом от первой джобы!
-        # Нам больше не нужны Java и Maven в этой виртуалке!
-        - name: Download WAR artifact
-          uses: actions/download-artifact@v4
-          with:
-            name: employee-app-war # Имя посылки должно совпадать
-            path: backend-app/target/ # Кладем туда, где его будет искать Dockerfile
+      # 2. Скачиваем "посылку" с WAR-файлом от первой джобы!
+      # Нам больше не нужны Java и Maven в этой виртуалке!
+      - name: Download WAR artifact
+        uses: actions/download-artifact@v4
+        with:
+          name: employee-app-war # Имя посылки должно совпадать
+          path: backend-app/target/ # Кладем туда, где его будет искать Dockerfile
 
-        # 3. Логинимся в Docker Hub
-        - name: Log in to Docker Hub
-          uses: docker/login-action@v3
-          with:
-            username: ${{ secrets.DOCKERHUB_USERNAME }}
-            password: ${{ secrets.DOCKERHUB_TOKEN }}
+      # 3. Логинимся в Docker Hub
+      - name: Log in to Docker Hub
+        uses: docker/login-action@v3
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
 
-        # 4. Собираем и пушим образ
-        - name: Build and push Docker image
-          uses: docker/build-push-action@v5
-          with:
-            context: .
-            push: true
-            tags: ${{ secrets.DOCKERHUB_USERNAME }}/employee-manager-app:latest
+      # 4. Собираем и пушим образ
+      - name: Build and push Docker image
+        uses: docker/build-push-action@v5
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKERHUB_USERNAME }}/employee-manager-app:latest
