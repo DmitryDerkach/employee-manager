@@ -66,6 +66,25 @@ jobs:
         # Добавляем флаг headless для UI тестов
         run: mvn test -pl aqa-framework -Dselenide.headless=true
 
+      # --- НАЧАЛО БЛОКА БЕЗОПАСНОСТИ OWASP ZAP ---
+      - name: Run OWASP ZAP Security Scan
+        uses: zaproxy/action-baseline@v0.14.0
+        with:
+          target: 'http://localhost:8080/' # Атакуем наше запущенное приложение
+          # Мы ставим fail_action в false. У ZAP очень строгие правила.
+          # Если он найдет даже мелкую уязвимость, он "уронит" пайплайн.
+          # Пока мы просто хотим получить красивый отчет, а не блокировать релиз.
+          fail_action: false
+
+      # ZAP автоматически генерирует HTML-отчет о взломе.
+      # Давай сохраним его как Артефакт, чтобы ты мог его скачать и посмотреть!
+      - name: Upload ZAP Security Report
+        uses: actions/upload-artifact@v4
+        with:
+          name: ZAP-Security-Report
+          path: zap_report.html
+      # --- КОНЕЦ БЛОКА БЕЗОПАСНОСТИ ---
+
       # --- ВСТАВКА НАЧАЛО: Переключаем Java для Сонара ---
       - name: Set up JDK 17 for Sonar
         uses: actions/setup-java@v4
